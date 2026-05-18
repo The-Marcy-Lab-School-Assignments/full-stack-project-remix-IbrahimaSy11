@@ -2,6 +2,17 @@
 
 A full-stack medical dashboard built with React, Express, and Postgres. Users can track their medications, log daily health notes, and view upcoming appointments — all behind a secure, session-based authentication system.
 
+## Screenshots
+
+### Login Page
+![Login Page](./docs/Screenshot%202026-05-18%20at%207.13.49%20PM.png)
+
+### Register Page
+![Register Page](./docs/Screenshot%202026-05-18%20at%207.14.13%20PM.png)
+
+### Dashboard
+![Dashboard](./docs/Screenshot%202026-05-18%20at%207.14.33%20PM.png)
+
 ## User Stories
 
 **Auth**
@@ -50,12 +61,12 @@ A user has many medications. Deleting a user cascades to delete all of their med
 
 ### Medication endpoints (all require authentication)
 
-| Method | Endpoint                      | Request Body                    | Response                                                        |
-| ------ | ----------------------------- | ------------------------------- | --------------------------------------------------------------- |
-| GET    | `/api/medications`            | —                               | `[{ medication_id, name, dosage, frequency, is_taken, user_id }]` |
-| POST   | `/api/medications`            | `{ name, dosage, frequency }`   | `{ medication_id, name, dosage, frequency, is_taken, user_id }` |
-| PATCH  | `/api/medications/:id`        | `{ is_taken }`                  | `{ medication_id, name, dosage, frequency, is_taken, user_id }` |
-| DELETE | `/api/medications/:id`        | —                               | `{ medication_id, name, dosage, frequency, is_taken, user_id }` |
+| Method | Endpoint               | Request Body                  | Response                                                          |
+| ------ | ---------------------- | ----------------------------- | ----------------------------------------------------------------- |
+| GET    | `/api/medications`     | —                             | `[{ medication_id, name, dosage, frequency, is_taken, user_id }]` |
+| POST   | `/api/medications`     | `{ name, dosage, frequency }` | `{ medication_id, name, dosage, frequency, is_taken, user_id }`   |
+| PATCH  | `/api/medications/:id` | `{ is_taken }`                | `{ medication_id, name, dosage, frequency, is_taken, user_id }`   |
+| DELETE | `/api/medications/:id` | —                             | `{ medication_id, name, dosage, frequency, is_taken, user_id }`   |
 
 ## Setup
 
@@ -114,6 +125,7 @@ After running `npm run db:seed`, these accounts are available:
 
 ```
 full-stack-project-remix-IbrahimaSy11/
+├── docs/                            # Screenshots
 ├── frontend/                        # React app (Vite)
 │   ├── src/
 │   │   ├── App.jsx                  # Root component: currentUser state, session rehydration, auth handlers
@@ -122,7 +134,7 @@ full-stack-project-remix-IbrahimaSy11/
 │   │   │   └── medication-adapters.js  # Fetch adapters for /api/medications/* endpoints
 │   │   └── components/
 │   │       ├── AuthPage.jsx         # Login + Register forms (shown when logged out)
-│   │       ├── Dashboard.jsx        # Main app container with sidebar (shown when logged in)
+│   │       ├── Dashboard.jsx        # Main app container (shown when logged in)
 │   │       ├── MedicationList.jsx   # Renders a list of MedicationItems
 │   │       ├── MedicationItem.jsx   # Single medication: toggle taken, name, dosage, delete button
 │   │       └── AddMedicationForm.jsx # Form to add a new medication
