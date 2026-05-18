@@ -1,36 +1,45 @@
 const pool = require('../db/pool');
 
-// Returns all todos for a specific user, ordered by creation time
+// REMIX: renamed from todoModel.js to medicationModel.js
+// REMIX: all queries now target the medications table instead of todos
+// REMIX: todo_id -> medication_id, title -> name, is_complete -> is_taken
+// REMIX: added dosage and frequency as new columns
+
+// Returns all medications for a specific user, ordered by creation time
 module.exports.listByUser = async (user_id) => {
-  const query = 'SELECT * FROM todos WHERE user_id = $1 ORDER BY todo_id ASC';
+  const query = 'SELECT * FROM medications WHERE user_id = $1 ORDER BY medication_id ASC';
   const { rows } = await pool.query(query, [user_id]);
   return rows;
 };
 
-// Returns a single todo row (used for ownership checks before update/delete)
-module.exports.find = async (todo_id) => {
-  const query = 'SELECT * FROM todos WHERE todo_id = $1';
-  const { rows } = await pool.query(query, [todo_id]);
+// Returns a single medication row (used for ownership checks before update/delete)
+module.exports.find = async (medication_id) => {
+  const query = 'SELECT * FROM medications WHERE medication_id = $1';
+  const { rows } = await pool.query(query, [medication_id]);
   return rows[0] || null;
 };
 
-// Creates a new todo. Returns the full todo row.
-module.exports.create = async (title, user_id) => {
-  const query = 'INSERT INTO todos (title, user_id) VALUES ($1, $2) RETURNING *';
-  const { rows } = await pool.query(query, [title, user_id]);
+// Creates a new medication. Returns the full medication row.
+module.exports.create = async (name, dosage, frequency, user_id) => {
+  const query = `
+    INSERT INTO medications (name, dosage, frequency, user_id)
+    VALUES ($1, $2, $3, $4)
+    RETURNING *
+  `;
+  const { rows } = await pool.query(query, [name, dosage, frequency, user_id]);
   return rows[0];
 };
 
-// Updates is_complete for a todo. Returns the updated row.
-module.exports.update = async (todo_id, { is_complete }) => {
-  const query = 'UPDATE todos SET is_complete = $1 WHERE todo_id = $2 RETURNING *';
-  const { rows } = await pool.query(query, [is_complete, todo_id]);
+// Updates is_taken for a medication. Returns the updated row.
+module.exports.update = async (medication_id, { is_taken }) => {
+  const query = 'UPDATE medications SET is_taken = $1 WHERE medication_id = $2 RETURNING *';
+  const { rows } = await pool.query(query, [is_taken, medication_id]);
   return rows[0];
 };
 
-// Deletes a todo by id
-module.exports.destroy = async (todo_id) => {
-  const query = 'DELETE FROM todos WHERE todo_id = $1 RETURNING *';
-  const { rows } = await pool.query(query, [todo_id]);
+// Deletes a medication by id
+module.exports.destroy = async (medication_id) => {
+  const query = 'DELETE FROM medications WHERE medication_id = $1 RETURNING *';
+  const { rows } = await pool.query(query, [medication_id]);
   return rows[0] || null;
 };

@@ -1,5 +1,6 @@
+const path = require('path');
 const { Pool } = require('pg');
-require('dotenv').config();
+require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
 // A pool maintains a set of connections to the database that remain open and
 // can be dynamically allocated each time we send a query. This is more efficient
