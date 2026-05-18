@@ -72,11 +72,27 @@ function RegisterForm({ handleRegister }) {
   );
 }
 
+// REMIX: updated AuthPage to show login and register on separate views
+// toggled by a link below the form instead of side by side
 function AuthPage({ handleLogin, handleRegister }) {
+  const [showRegister, setShowRegister] = useState(false);
+
   return (
     <div id="auth-section">
-      <LoginForm handleLogin={handleLogin} />
-      <RegisterForm handleRegister={handleRegister} />
+      {showRegister
+        ? <RegisterForm handleRegister={handleRegister} />
+        : <LoginForm handleLogin={handleLogin} />
+      }
+      <p className="auth-toggle">
+        {showRegister
+          ? <>Already have an account?{' '}
+              <button className="toggle-btn" onClick={() => setShowRegister(false)}>Log In</button>
+            </>
+          : <>Don't have an account?{' '}
+              <button className="toggle-btn" onClick={() => setShowRegister(true)}>Register</button>
+            </>
+        }
+      </p>
     </div>
   );
 }

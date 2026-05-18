@@ -28,17 +28,22 @@ function AddMedicationForm({ loadMedications }) {
 
   return (
     // REMIX: renamed id from add-todo-form to add-medication-form
+    // REMIX: wrapped three inputs in form-fields div for clean grid layout
     <form id="add-medication-form" onSubmit={handleSubmit}>
-      {/* REMIX: three inputs instead of one — name, dosage, frequency */}
-      <label htmlFor="name-input">Medication Name:</label>
-      <input type="text" name="name" id="name-input" placeholder="e.g. Metformin" />
-
-      <label htmlFor="dosage-input">Dosage:</label>
-      <input type="text" name="dosage" id="dosage-input" placeholder="e.g. 500mg" />
-
-      <label htmlFor="frequency-input">Frequency:</label>
-      <input type="text" name="frequency" id="frequency-input" placeholder="e.g. Twice daily" />
-
+      <div className="form-fields">
+        <div>
+          <label htmlFor="name-input">Medication Name:</label>
+          <input type="text" name="name" id="name-input" placeholder="e.g. Metformin" />
+        </div>
+        <div>
+          <label htmlFor="dosage-input">Dosage:</label>
+          <input type="text" name="dosage" id="dosage-input" placeholder="e.g. 500mg" />
+        </div>
+        <div>
+          <label htmlFor="frequency-input">Frequency:</label>
+          <input type="text" name="frequency" id="frequency-input" placeholder="e.g. Twice daily" />
+        </div>
+      </div>
       <button type="submit">Add Medication</button>
     </form>
   );
