@@ -1,47 +1,56 @@
-// REMIX: renamed from TodoItem.jsx to MedicationItem.jsx
-// REMIX: replaced todo-adapters with medication-adapters
-// REMIX: replaced updateTodo/deleteTodo with updateMedication/deleteMedication
+import { useState } from 'react';
 import { updateMedication, deleteMedication } from '../adapters/medication-adapters';
 
-// REMIX: renamed from TodoItem to MedicationItem
-// REMIX: renamed props from todo/loadTodos to medication/loadMedications
-function MedicationItem({ medication, loadMedications }) {
+function ConfirmModal({ message, onConfirm, onCancel }) {
+  return (
+    <div className="modal-overlay">
+      <div className="modal">
+        <p>{message}</p>
+        <div className="modal-actions">
+          <button className="modal-cancel" onClick={onCancel}>Cancel</button>
+          <button className="modal-confirm" onClick={onConfirm}>Delete</button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
-  // REMIX: renamed from handleChange — now toggles is_taken instead of is_complete
-  // REMIX: calls updateMedication instead of updateTodo
-  // REMIX: uses medication.medication_id instead of todo.todo_id
+function MedicationItem({ medication, loadMedications }) {
+  const [showConfirm, setShowConfirm] = useState(false);
+
   const handleChange = async (e) => {
     const { error } = await updateMedication(medication.medication_id, { is_taken: e.target.checked });
     if (error) return console.error(error);
-    // REMIX: calls loadMedications instead of loadTodos
     loadMedications();
   };
 
-  // REMIX: calls deleteMedication instead of deleteTodo
-  // REMIX: uses medication.medication_id instead of todo.todo_id
   const handleDelete = async () => {
     const { error } = await deleteMedication(medication.medication_id);
     if (error) return console.error(error);
-    // REMIX: calls loadMedications instead of loadTodos
     loadMedications();
   };
 
   return (
-    // REMIX: renamed class from todo-item to medication-item
-    <li className="medication-item">
-      {/* REMIX: checkbox now reflects is_taken instead of is_complete */}
-      <input
-        type="checkbox"
-        checked={medication.is_taken}
-        onChange={handleChange}
-      />
-      {/* REMIX: shows name, dosage, frequency instead of just title */}
-      {/* REMIX: strike-through applies when is_taken is true */}
-      <span className={medication.is_taken ? 'completed' : ''}>
-        {medication.name} — {medication.dosage} · {medication.frequency}
-      </span>
-      <button className="delete-btn" onClick={handleDelete}>Delete</button>
-    </li>
+    <>
+      {showConfirm && (
+        <ConfirmModal
+          message="Are you sure you want to delete this medication?"
+          onConfirm={() => { setShowConfirm(false); handleDelete(); }}
+          onCancel={() => setShowConfirm(false)}
+        />
+      )}
+      <li className="medication-item">
+        <input
+          type="checkbox"
+          checked={medication.is_taken}
+          onChange={handleChange}
+        />
+        <span className={medication.is_taken ? 'completed' : ''}>
+          {medication.name} — {medication.dosage} · {medication.frequency}
+        </span>
+        <button className="delete-btn" onClick={() => setShowConfirm(true)}>Delete</button>
+      </li>
+    </>
   );
 }
 

@@ -1,34 +1,20 @@
-// REMIX: renamed from AddTodoForm.jsx to AddMedicationForm.jsx
-// REMIX: replaced createTodo with createMedication
 import { createMedication } from '../adapters/medication-adapters';
 
-// REMIX: renamed from AddTodoForm to AddMedicationForm
-// REMIX: renamed prop from loadTodos to loadMedications
 function AddMedicationForm({ loadMedications }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
-
-    // REMIX: getting name, dosage, frequency from form instead of just title
     const name = form.elements.name.value;
     const dosage = form.elements.dosage.value;
     const frequency = form.elements.frequency.value;
-
-    // REMIX: validating all three fields instead of just title
-    if (!name || !dosage || !frequency) return;
-
-    // REMIX: calling createMedication with name, dosage, frequency instead of createTodo with title
+    if (!name) return;
     const { error } = await createMedication(name, dosage, frequency);
     if (error) return console.error(error);
-
-    // REMIX: calls loadMedications instead of loadTodos
     await loadMedications();
     form.reset();
   };
 
   return (
-    // REMIX: renamed id from add-todo-form to add-medication-form
-    // REMIX: wrapped three inputs in form-fields div for clean grid layout
     <form id="add-medication-form" onSubmit={handleSubmit}>
       <div className="form-fields">
         <div>

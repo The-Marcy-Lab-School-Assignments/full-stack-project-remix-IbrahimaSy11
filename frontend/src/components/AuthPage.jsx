@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function LoginForm({ handleLogin }) {
+function LoginForm({ handleLogin, onSwitch }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState(null);
@@ -8,35 +8,27 @@ function LoginForm({ handleLogin }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const error = await handleLogin(username, password);
-    if (error) {
-      setErrorMessage('Invalid username or password.');
-    }
+    if (error) setErrorMessage('Invalid username or password.');
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <h2>Log In</h2>
-      <input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        required
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-      />
+      <input type="text" placeholder="Username" value={username}
+        onChange={(e) => setUsername(e.target.value)} required />
+      <input type="password" placeholder="Password" value={password}
+        onChange={(e) => setPassword(e.target.value)} required />
       {errorMessage && <p className="error">{errorMessage}</p>}
       <button type="submit">Log In</button>
+      <p className="auth-toggle">
+        Don't have an account?{' '}
+        <button type="button" className="toggle-btn" onClick={onSwitch}>Register</button>
+      </p>
     </form>
   );
 }
 
-function RegisterForm({ handleRegister }) {
+function RegisterForm({ handleRegister, onSwitch }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState(null);
@@ -44,55 +36,35 @@ function RegisterForm({ handleRegister }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const error = await handleRegister(username, password);
-    if (error) {
-      setErrorMessage('Could not register. Username may already be taken.');
-    }
+    if (error) setErrorMessage('Could not register. Username may already be taken.');
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <h2>Register</h2>
-      <input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        required
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-      />
+      <input type="text" placeholder="Username" value={username}
+        onChange={(e) => setUsername(e.target.value)} required />
+      <input type="password" placeholder="Password" value={password}
+        onChange={(e) => setPassword(e.target.value)} required />
       {errorMessage && <p className="error">{errorMessage}</p>}
       <button type="submit">Register</button>
+      <p className="auth-toggle">
+        Already have an account?{' '}
+        <button type="button" className="toggle-btn" onClick={onSwitch}>Log In</button>
+      </p>
     </form>
   );
 }
 
-// REMIX: updated AuthPage to show login and register on separate views
-// toggled by a link below the form instead of side by side
 function AuthPage({ handleLogin, handleRegister }) {
-  const [showRegister, setShowRegister] = useState(false);
+  const [showLogin, setShowLogin] = useState(true);
 
   return (
     <div id="auth-section">
-      {showRegister
-        ? <RegisterForm handleRegister={handleRegister} />
-        : <LoginForm handleLogin={handleLogin} />
+      {showLogin
+        ? <LoginForm handleLogin={handleLogin} onSwitch={() => setShowLogin(false)} />
+        : <RegisterForm handleRegister={handleRegister} onSwitch={() => setShowLogin(true)} />
       }
-      <p className="auth-toggle">
-        {showRegister
-          ? <>Already have an account?{' '}
-              <button className="toggle-btn" onClick={() => setShowRegister(false)}>Log In</button>
-            </>
-          : <>Don't have an account?{' '}
-              <button className="toggle-btn" onClick={() => setShowRegister(true)}>Register</button>
-            </>
-        }
-      </p>
     </div>
   );
 }
